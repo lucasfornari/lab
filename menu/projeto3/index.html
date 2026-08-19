@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planejador de Tiros (Wishes) Genshin Impact — Calculadora de Primogemas e Pity</title>
+
+<!-- ===================== SEO ===================== -->
+<meta name="description" content="Planejador de tiros (wishes) gratuito para Genshin Impact. Calcule quantas primogemas, fates intertwined e tiros você precisa, controle o pity (garantia) e planeje seus banners de personagem e arma.">
+<meta name="keywords" content="Genshin Impact, planejador de tiros, calculadora de wishes, calculadora de primogemas, pity, garantia, soft pity, hard pity, intertwined fate, acquaint fate, fate entrelaçado, banner de personagem, banner de arma, planejador de banner, quantos tiros, quantas primogemas, 50/50, gacha, Hoyoverse, miHoYo, wish planner, primogemas calculadora">
+<meta name="author" content="Planejador de Tiros Genshin Impact">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="language" content="pt-BR">
+<meta name="theme-color" content="#6d4aff">
+<!-- TODO: trocar https://example.com pelo domínio real do site -->
+<link rel="canonical" href="https://example.com/">
+
+<!-- Favicons / ícones (placeholders em /assets — substituir por arte definitiva) -->
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+<!-- Open Graph (Facebook, WhatsApp, Discord) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Planejador de Tiros — Genshin Impact">
+<meta property="og:title" content="Planejador de Tiros (Wishes) Genshin Impact — Calculadora de Primogemas e Pity">
+<meta property="og:description" content="Calcule quantos tiros e primogemas você precisa, controle o pity (garantia) e planeje seus banners de personagem e arma no Genshin Impact.">
+<meta property="og:url" content="https://example.com/">
+<meta property="og:image" content="https://example.com/assets/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="Planejador de Tiros para Genshin Impact — calculadora de primogemas e pity">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Planejador de Tiros (Wishes) Genshin Impact — Calculadora de Primogemas e Pity">
+<meta name="twitter:description" content="Calcule quantos tiros e primogemas você precisa, controle o pity (garantia) e planeje seus banners no Genshin Impact.">
+<meta name="twitter:image" content="https://example.com/assets/preview.png">
+<meta name="twitter:image:alt" content="Planejador de Tiros para Genshin Impact — calculadora de primogemas e pity">
+
+<!-- Dados estruturados (Schema.org) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Planejador de Tiros — Genshin Impact",
+  "description": "Calculadora e planejador de tiros (wishes) para Genshin Impact: calcule primogemas, fates, controle o pity (garantia) e planeje banners de personagem e arma.",
+  "url": "https://example.com/",
+  "image": "https://example.com/assets/preview.png",
+  "screenshot": "https://example.com/assets/preview.png",
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "Web",
+  "browserRequirements": "Requer JavaScript. Funciona em navegadores modernos.",
+  "inLanguage": "pt-BR",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "BRL"
+  },
+  "keywords": "Genshin Impact, planejador de tiros, calculadora de primogemas, pity, garantia, intertwined fate, banner, wish planner"
+}
+</script>
+<!-- =================== FIM SEO =================== -->
+
+<!-- Google tag (gtag.js) — PLACEHOLDER: trocar G-XXXXXXXXXX pelo ID real do GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script src="js/analytics.js"></script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://unpkg.com/sortablejs@1.15.0/Sortable.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Quicksand', 'sans-serif'],
+          display: ['Fredoka', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+<link rel="stylesheet" href="styles/main.css">
+</head>
+<body class="font-sans min-h-screen" data-device="desktop">
+
+<div id="appShell" class="w-full max-w-none">
+
+  <!-- Header -->
+  <header class="flex items-start justify-between gap-3 mb-8">
+    <div class="flex-1 text-center">
+      <h1 class="font-display text-3xl sm:text-4xl font-600 tracking-tight inline-flex items-center gap-2.5" style="color:var(--primary)">
+        <i data-lucide="sparkles" class="w-7 h-7"></i> Planejador de Tiros <i data-lucide="sparkles" class="w-7 h-7"></i>
+      </h1>
+      <p class="mt-2 text-sm sm:text-base" style="color:var(--text-secondary)">Calcule quantas gemas e fates você precisa para garantir seus personagens favoritos do Genshin Impact.</p>
+    </div>
+    <button id="themeToggle" title="Alternar tema" aria-label="Alternar tema claro/escuro"
+      class="theme-toggle icon-btn shrink-0 w-10 h-10 rounded-2xl surface soft-shadow flex items-center justify-center" style="color:var(--primary)">
+      <i data-lucide="sun" class="sun-icon w-5 h-5"></i>
+      <i data-lucide="moon" class="moon-icon w-5 h-5"></i>
+    </button>
+  </header>
+
+  <!-- Guia rápido -->
+  <section class="surface rounded-3xl p-4 sm:p-5 card-shadow mb-7 fade-in">
+    <h2 class="font-display text-lg sm:text-xl font-500 mb-3 inline-flex items-center gap-2">
+      <i data-lucide="map" class="w-5 h-5" style="color:var(--primary)"></i> Como usar (rápido)
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-sm">
+      <div class="rounded-2xl p-3.5" style="background:var(--surface-alt)">
+        <div class="text-xs font-700 mb-1.5" style="color:var(--primary)">PASSO 1</div>
+        <p style="color:var(--text-secondary)">Busque e adicione os personagens/armas que você quer, com o alvo (C0–C6 ou R1–R5).</p>
+      </div>
+      <div class="rounded-2xl p-3.5" style="background:var(--surface-alt)">
+        <div class="text-xs font-700 mb-1.5" style="color:var(--primary)">PASSO 2</div>
+        <p style="color:var(--text-secondary)">Se quiser, informe seu pity e quantos tiros já tem — pode deixar em branco, perguntamos na hora.</p>
+      </div>
+      <div class="rounded-2xl p-3.5" style="background:var(--surface-alt)">
+        <div class="text-xs font-700 mb-1.5" style="color:var(--primary)">PASSO 3</div>
+        <p style="color:var(--text-secondary)">Veja melhor caso, média esperada e pior caso no planejador.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resumo / estatísticas -->
+  <section id="statsBar" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3 mb-7 fade-in">
+    <div class="surface rounded-2xl p-3.5 soft-shadow text-center">
+      <div class="text-xl font-700" style="color:var(--primary)" id="statChars">0</div>
+      <div class="text-[11px]" style="color:var(--text-secondary)">itens desejados</div>
+    </div>
+    <div class="surface rounded-2xl p-3.5 soft-shadow text-center">
+      <div class="text-xl font-700" style="color:var(--primary)" id="statCopies">0</div>
+      <div class="text-[11px]" style="color:var(--text-secondary)">cópias planejadas</div>
+    </div>
+    <div class="surface rounded-2xl p-3.5 soft-shadow text-center">
+      <div class="text-xl font-700" style="color:var(--primary)" id="statWishes">0</div>
+      <div class="text-[11px]" style="color:var(--text-secondary)">tiros (média)</div>
+    </div>
+    <div class="surface rounded-2xl p-3.5 soft-shadow text-center">
+      <div class="text-xl font-700" style="color:var(--primary)" id="statPrimos">0</div>
+      <div class="text-[11px]" style="color:var(--text-secondary)">primogems (média)</div>
+    </div>
+  </section>
+
+  <!-- Cadastro de personagens e armas -->
+  <section class="surface rounded-3xl p-5 sm:p-7 card-shadow mb-7 fade-in">
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <h2 class="font-display text-xl font-500 flex items-center gap-2"><i data-lucide="flower-2" class="w-5 h-5" style="color:var(--primary)"></i> 1) Personagens e armas desejados</h2>
+      <span id="reorderHint" class="hidden text-xs" style="color:var(--text-faint)">arraste para reordenar →</span>
+    </div>
+
+    <!-- Escopo da busca -->
+    <div id="scopeToggle" class="seg inline-flex rounded-2xl p-1 mb-3" style="background:var(--surface-alt)" role="tablist" aria-label="O que buscar">
+      <button type="button" class="seg-btn" data-scope="character" aria-selected="false"><i data-lucide="user" class="w-3.5 h-3.5"></i> Personagens</button>
+      <button type="button" class="seg-btn" data-scope="weapon" aria-selected="false"><i data-lucide="sword" class="w-3.5 h-3.5"></i> Armas</button>
+      <button type="button" class="seg-btn" data-scope="both" aria-selected="true"><i data-lucide="layers" class="w-3.5 h-3.5"></i> Ambos</button>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end relative">
+      <div class="flex-1 relative">
+        <label id="searchLabel" class="block text-sm font-500 mb-1.5">Buscar personagem ou arma 5★</label>
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2" style="color:var(--text-faint)"></i>
+          <input id="charInput" type="text" autocomplete="off" placeholder="ex.: Hu Tao, Furina, Aquila Favonia..." aria-describedby="charInputError"
+            class="w-full rounded-2xl border pl-10 pr-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border); --tw-ring-color: var(--primary)">
+        </div>
+        <div id="autocompleteBox" class="hidden absolute z-20 left-0 right-0 mt-1.5 rounded-2xl border soft-shadow max-h-72 overflow-y-auto"
+          style="background:var(--surface); border-color:var(--border)"></div>
+        <p id="charInputError" class="hidden text-[11px] mt-1 text-input-error" role="alert"></p>
+      </div>
+      <button id="addChar"
+        class="icon-btn rounded-2xl text-white font-600 px-6 py-2.5 soft-shadow whitespace-nowrap inline-flex items-center gap-1.5 justify-center" style="background:var(--primary)">
+        <i data-lucide="plus" class="w-4 h-4"></i> Adicionar
+      </button>
+    </div>
+    <p id="apiStatus" class="text-xs mt-2" style="color:var(--text-faint)" role="status" aria-live="polite">Carregando catálogos 5★…</p>
+    <button id="manualAddTrigger" type="button"
+      class="icon-btn text-xs mt-1.5 inline-flex items-center gap-1.5 font-600" style="color:var(--primary)">
+      <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Não encontrou? <span id="manualAddLabel">Adicionar manualmente</span>
+    </button>
+
+    <ul id="charListUI" class="mt-5 space-y-3"></ul>
+    <p id="emptyHint" class="text-center text-sm py-6" style="color:var(--text-faint)">Nenhum item na lista ainda. Busque acima.</p>
+  </section>
+
+  <!-- Estado atual / configuração global -->
+  <section class="surface rounded-3xl p-5 sm:p-7 card-shadow mb-7 fade-in">
+    <h2 class="font-display text-xl font-500 mb-1 flex items-center gap-2"><i data-lucide="target" class="w-5 h-5" style="color:var(--primary)"></i> 2) Seu estado atual</h2>
+    <p class="text-xs mb-4" style="color:var(--text-faint)">Opcional agora — se deixar em branco, perguntamos na hora de calcular.</p>
+
+    <!-- Pity do banner de PERSONAGEM -->
+    <div class="rounded-2xl border p-3.5 mb-3" style="border-color:var(--border)">
+      <div class="text-sm font-600 mb-2.5 inline-flex items-center gap-1.5" style="color:var(--primary)"><i data-lucide="flower-2" class="w-4 h-4"></i> Banner de personagem</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
+        <div>
+          <label class="block text-sm font-500 mb-1.5">Pity atual <span style="color:var(--text-faint)" class="font-400">(tiros desde o último 5★, 0–89)</span></label>
+          <input id="currentPity" type="number" min="0" max="89" inputmode="numeric" placeholder="ex.: 0" aria-describedby="currentPityHint currentPityError"
+            class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border); --tw-ring-color: var(--primary)">
+          <p id="currentPityHint" class="text-[11px] mt-1" style="color:var(--text-faint)">Deixe vazio se não souber agora (você pode informar depois).</p>
+          <p id="currentPityError" class="hidden text-[11px] mt-1 text-input-error" role="alert"></p>
+        </div>
+        <label class="flex items-center gap-2.5 cursor-pointer select-none sm:mt-7">
+          <input id="guaranteed" type="checkbox" class="w-5 h-5 rounded-md shrink-0" style="accent-color:var(--primary)">
+          <span class="text-sm font-500">Garantia ativa <span style="color:var(--text-secondary)" class="font-400">(perdi o último 50/50)</span></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Pity do banner de ARMA — só aparece quando há arma na lista (js/render-list.js) -->
+    <div id="weaponPityBlock" class="hidden rounded-2xl border p-3.5 mb-3 fade-in" style="border-color:var(--border)">
+      <div class="text-sm font-600 mb-2.5 inline-flex items-center gap-1.5" style="color:var(--amber)"><i data-lucide="sword" class="w-4 h-4"></i> Banner de arma</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
+        <div>
+          <label class="block text-sm font-500 mb-1.5">Pity atual <span style="color:var(--text-faint)" class="font-400">(tiros desde o último 5★, 0–79)</span></label>
+          <input id="weaponPity" type="number" min="0" max="79" inputmode="numeric" placeholder="ex.: 0" aria-describedby="weaponPityHint weaponPityError"
+            class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border); --tw-ring-color: var(--amber)">
+          <p id="weaponPityHint" class="text-[11px] mt-1" style="color:var(--text-faint)">Deixe vazio se não souber agora (você pode informar depois).</p>
+          <p id="weaponPityError" class="hidden text-[11px] mt-1 text-input-error" role="alert"></p>
+        </div>
+        <label class="flex items-center gap-2.5 cursor-pointer select-none sm:mt-7">
+          <input id="weaponGuaranteed" type="checkbox" class="w-5 h-5 rounded-md shrink-0" style="accent-color:var(--amber)">
+          <span class="text-sm font-500">Fate Point ativo <span style="color:var(--text-secondary)" class="font-400">(próximo 5★ é a arma escolhida)</span></span>
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-500 mb-1.5">Tiros guardados <span style="color:var(--text-faint)" class="font-400">(fates / destinos — servem para os dois banners)</span></label>
+      <input id="ownedWishes" type="number" min="0" inputmode="numeric" placeholder="0" aria-describedby="ownedWishesError"
+        class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border); --tw-ring-color: var(--primary)">
+      <p id="ownedWishesError" class="hidden text-[11px] mt-1 text-input-error" role="alert"></p>
+    </div>
+
+    <div class="mt-3 text-xs rounded-xl px-3 py-2" style="color:var(--text-secondary); background:var(--surface-alt)">
+      Total disponível: <strong id="totalWishesNow" style="color:var(--text)">0 tiros</strong> · 1 tiro = 160 primogems
+    </div>
+    <div class="flex gap-2.5 mt-4">
+      <button id="recalcBtn"
+        class="icon-btn flex-1 rounded-2xl text-white font-600 px-4 py-2.5 soft-shadow inline-flex items-center justify-center gap-1.5" style="background:var(--primary)">
+        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Recalcular
+      </button>
+      <button id="clearBtn"
+        class="icon-btn rounded-2xl font-600 px-4 py-2.5 soft-shadow inline-flex items-center justify-center gap-1.5" style="background:var(--rose-soft); color:var(--rose)">
+        <i data-lucide="trash-2" class="w-4 h-4"></i> Limpar tudo
+      </button>
+    </div>
+  </section>
+
+  <!-- Resultado / Cálculo -->
+  <section class="rounded-3xl p-5 sm:p-7 card-shadow mb-7 fade-in border" style="background:var(--primary-soft); border-color:var(--border)">
+    <h2 class="font-display text-xl font-500 mb-4 flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-5 h-5" style="color:var(--primary)"></i> 3) Planejador</h2>
+    <div id="resultBody" class="space-y-4 text-sm">
+      <p class="text-center py-4" style="color:var(--text-secondary)">Adicione personagens para ver o cálculo.</p>
+    </div>
+  </section>
+
+  <!-- Exportar -->
+  <section id="exportSection" class="hidden flex flex-wrap gap-2.5 mb-7 fade-in">
+    <button id="exportImgBtn" class="icon-btn surface rounded-2xl font-600 px-4 py-2.5 soft-shadow inline-flex items-center gap-1.5 text-sm">
+      <i data-lucide="image-down" class="w-4 h-4" style="color:var(--primary)"></i> Exportar imagem
+    </button>
+    <span id="saveStatus" class="text-xs self-center inline-flex items-center gap-1" style="color:var(--text-faint)">
+      <i data-lucide="check" class="w-3.5 h-3.5"></i> salvo automaticamente neste navegador
+    </span>
+  </section>
+
+  <!-- Regras -->
+  <button id="rulesBtn" type="button"
+    class="icon-btn surface rounded-2xl px-5 py-4 text-sm soft-shadow w-full text-left font-600 inline-flex items-center gap-2" style="color:var(--text)">
+    <i data-lucide="book-open" class="w-4 h-4" style="color:var(--primary)"></i> Como funciona o cálculo (regras 2026)
+  </button>
+
+  <!-- Modal de regras -->
+  <div id="rulesModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div id="rulesBackdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-3xl card-shadow surface p-5 sm:p-6 fade-in"
+      role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle">
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <h3 id="rulesModalTitle" class="font-display text-lg font-600 inline-flex items-center gap-2" style="color:var(--text)">
+          <i data-lucide="book-open" class="w-5 h-5 shrink-0" style="color:var(--primary)"></i> Como funciona o cálculo (regras 2026)
+        </h3>
+        <button id="rulesCloseBtn" type="button" aria-label="Fechar"
+          class="icon-btn w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style="background:var(--surface-alt)">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="space-y-2 leading-relaxed text-sm" style="color:var(--text-secondary)">
+        <p>• <strong style="color:var(--text)">Custo:</strong> cada tiro custa 160 primogems (1 Intertwined Fate). Os dois banners têm <strong style="color:var(--text)">pity independente</strong>: tirar no de personagem não conta para o de arma, e vice-versa.</p>
+
+        <p class="font-display font-600 pt-1 inline-flex items-center gap-1.5" style="color:var(--primary)"><i data-lucide="flower-2" class="w-4 h-4"></i> Banner de personagem</p>
+        <p>• <strong style="color:var(--text)">Hard pity 90:</strong> 5★ garantido no tiro 90.</p>
+        <p>• <strong style="color:var(--text)">Soft pity ~74:</strong> a chance de 5★ dispara a partir do tiro ~74 (taxa base 0,6%), por isso a maioria sai entre 74 e 89.</p>
+        <p>• <strong style="color:var(--text)">50/50:</strong> ao tirar um 5★, há 50% de ser o personagem em destaque. Com o <em>Capturing Radiance</em> a taxa efetiva é ~55% a seu favor.</p>
+        <p>• <strong style="color:var(--text)">Garantia:</strong> se você perde o 50/50, o próximo 5★ é 100% o destaque. Pity e garantia persistem entre banners de personagem.</p>
+        <p>• <strong style="color:var(--text)">Constelação:</strong> C0 exige 1 cópia, C1 exige 2, ... C6 exige 7. Cada cópia é um novo ciclo de pity do zero.</p>
+        <p>• <strong style="color:var(--text)">Por cópia:</strong> melhor ~74 tiros · média ~90 (incluindo perder o 50/50) · pior 180 tiros (perde o 50/50 no tiro 90 e garante no ciclo seguinte).</p>
+
+        <p class="font-display font-600 pt-1 inline-flex items-center gap-1.5" style="color:var(--amber)"><i data-lucide="sword" class="w-4 h-4"></i> Banner de arma (Caminho Epitomizado)</p>
+        <p>• <strong style="color:var(--text)">Hard pity 80:</strong> 5★ garantido no tiro 80 — pity menor que o de personagem.</p>
+        <p>• <strong style="color:var(--text)">Soft pity ~63:</strong> a chance dispara a partir do tiro ~63 (taxa base 0,7%); a taxa consolidada é ~1,85%, ~54 tiros em média por 5★.</p>
+        <p>• <strong style="color:var(--text)">75% / 37,5%:</strong> ao tirar um 5★, há 75% de ser uma das <em>duas</em> armas em destaque; logo, ~37,5% de ser exatamente a arma que você quer.</p>
+        <p>• <strong style="color:var(--text)">Fate Points:</strong> você fixa um "rumo" na arma desejada. Cada 5★ que não for a sua arma rende 1 ponto; ao chegar a <strong style="color:var(--text)">1 ponto</strong> (regras atuais), o próximo 5★ é garantidamente a sua.</p>
+        <p>• <strong style="color:var(--text)">Refinamento:</strong> R1 exige 1 cópia, R2 exige 2, ... R5 exige 5. Cada cópia é um novo ciclo de pity do zero.</p>
+        <p>• <strong style="color:var(--text)">Por cópia:</strong> melhor ~63 tiros · média ~87 · pior 160 tiros (uma arma "errada" no tiro 80 e a garantida no ciclo seguinte).</p>
+
+        <p class="pt-1">• <strong style="color:var(--text)">Estado atual:</strong> o pity e a garantia que você informa acima valem para o <strong style="color:var(--text)">banner de personagem</strong> (1ª cópia do 1º personagem). As armas são calculadas começando do zero.</p>
+        <p>• O planejador mostra sempre três cenários: <strong style="color:var(--text)">melhor caso</strong>, <strong style="color:var(--text)">média esperada</strong> e <strong style="color:var(--text)">pior caso</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de cadastro manual -->
+  <div id="manualModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div id="manualBackdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-md max-h-[85vh] overflow-y-auto rounded-3xl card-shadow surface p-5 sm:p-6 fade-in"
+      role="dialog" aria-modal="true" aria-labelledby="manualModalTitle">
+      <div class="flex items-start justify-between gap-3 mb-2">
+        <h3 id="manualModalTitle" class="font-display text-lg font-600 inline-flex items-center gap-2" style="color:var(--text)">
+          <i data-lucide="user-plus" class="w-5 h-5 shrink-0" style="color:var(--primary)"></i> <span id="manualTitleText">Adicionar manualmente</span>
+        </h3>
+        <button id="manualCloseBtn" type="button" aria-label="Fechar"
+          class="icon-btn w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style="background:var(--surface-alt)">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs mb-3" style="color:var(--text-secondary)">Use para itens recentes que ainda não estão na base pública (a API pode demorar a atualizar). Eles entram no cálculo normalmente — só não têm ícone próprio.</p>
+
+      <!-- Tipo do item -->
+      <div id="manualModeToggle" class="seg inline-flex rounded-2xl p-1 mb-3" style="background:var(--surface-alt)" role="tablist" aria-label="Tipo do item">
+        <button type="button" class="seg-btn" data-mode="character" aria-selected="true"><i data-lucide="user" class="w-3.5 h-3.5"></i> Personagem</button>
+        <button type="button" class="seg-btn" data-mode="weapon" aria-selected="false"><i data-lucide="sword" class="w-3.5 h-3.5"></i> Arma</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label id="manualNameLabel" class="block text-sm font-500 mb-1.5">Nome do personagem</label>
+          <input id="manualName" type="text" autocomplete="off" placeholder="ex.: Varka" maxlength="50"
+            class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border); --tw-ring-color: var(--primary)">
+        </div>
+        <div id="manualElementField">
+          <label class="block text-sm font-500 mb-1.5">Elemento <span style="color:var(--text-faint)" class="font-400">(opcional)</span></label>
+          <select id="manualElement" class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border)">
+            <option value="">Desconhecido</option>
+            <option value="Pyro">Pyro</option>
+            <option value="Hydro">Hydro</option>
+            <option value="Electro">Electro</option>
+            <option value="Anemo">Anemo</option>
+            <option value="Cryo">Cryo</option>
+            <option value="Geo">Geo</option>
+            <option value="Dendro">Dendro</option>
+          </select>
+        </div>
+        <div id="manualWeaponField" class="hidden">
+          <label class="block text-sm font-500 mb-1.5">Tipo de arma <span style="color:var(--text-faint)" class="font-400">(opcional)</span></label>
+          <select id="manualWeaponType" class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border)">
+            <option value="">Desconhecido</option>
+            <option value="Sword">Sword</option>
+            <option value="Claymore">Claymore</option>
+            <option value="Polearm">Polearm</option>
+            <option value="Bow">Bow</option>
+            <option value="Catalyst">Catalyst</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-500 mb-1.5">URL do ícone <span style="color:var(--text-faint)" class="font-400">(opcional)</span></label>
+          <input id="manualIcon" type="url" inputmode="url" autocomplete="off" placeholder="https://..."
+            class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border); --tw-ring-color: var(--primary)">
+          <p class="text-[11px] mt-1" style="color:var(--text-faint)">Deixe em branco para usar um ícone genérico (★).</p>
+        </div>
+      </div>
+      <p id="manualError" class="hidden text-xs mt-3 rounded-xl px-3 py-2" style="color:var(--rose); background:var(--rose-soft)" role="alert" aria-live="assertive"></p>
+      <div class="flex gap-2.5 mt-5">
+        <button id="manualCancelBtn" type="button" class="icon-btn flex-1 rounded-2xl font-600 px-4 py-2.5" style="background:var(--surface-alt)">Cancelar</button>
+        <button id="manualSubmitBtn" type="button" class="icon-btn flex-1 rounded-2xl text-white font-600 px-4 py-2.5" style="background:var(--primary)">Adicionar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: pity faltando -->
+  <div id="pityModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div id="pityBackdrop" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-md max-h-[85vh] overflow-y-auto rounded-3xl card-shadow surface p-5 sm:p-6 fade-in"
+      role="dialog" aria-modal="true" aria-labelledby="pityModalTitle">
+      <div class="flex items-start justify-between gap-3 mb-2">
+        <h3 id="pityModalTitle" class="font-display text-lg font-600 inline-flex items-center gap-2" style="color:var(--text)">
+          <i data-lucide="target" class="w-5 h-5 shrink-0" style="color:var(--primary)"></i> Falta o seu pity
+        </h3>
+        <button id="pityCloseBtn" type="button" aria-label="Fechar"
+          class="icon-btn w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style="background:var(--surface-alt)">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs mb-4" style="color:var(--text-secondary)">Para o cálculo sair certo, informe quantos tiros você já deu desde o último 5★. Se acabou de sair um 5★, use <strong style="color:var(--text)">0</strong>.</p>
+
+      <div id="pityCharGroup" class="rounded-2xl border p-3.5 mb-3 hidden" style="border-color:var(--border)">
+        <div class="text-sm font-600 mb-2.5 inline-flex items-center gap-1.5" style="color:var(--primary)"><i data-lucide="flower-2" class="w-4 h-4"></i> Banner de personagem</div>
+        <label class="block text-sm font-500 mb-1.5">Pity atual <span style="color:var(--text-faint)" class="font-400">(0–89)</span></label>
+        <input id="pityModalChar" type="number" min="0" max="89" placeholder="ex.: 0"
+          class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border); --tw-ring-color: var(--primary)">
+        <label class="flex items-center gap-2.5 mt-3 cursor-pointer select-none w-fit">
+          <input id="pityModalCharGuar" type="checkbox" class="w-5 h-5 rounded-md shrink-0" style="accent-color:var(--primary)">
+          <span class="text-sm font-500">Garantia ativa <span style="color:var(--text-secondary)" class="font-400">(perdi o último 50/50)</span></span>
+        </label>
+      </div>
+
+      <div id="pityWeaponGroup" class="rounded-2xl border p-3.5 mb-3 hidden" style="border-color:var(--border)">
+        <div class="text-sm font-600 mb-2.5 inline-flex items-center gap-1.5" style="color:var(--amber)"><i data-lucide="sword" class="w-4 h-4"></i> Banner de arma</div>
+        <label class="block text-sm font-500 mb-1.5">Pity atual <span style="color:var(--text-faint)" class="font-400">(0–79)</span></label>
+        <input id="pityModalWeapon" type="number" min="0" max="79" placeholder="ex.: 0"
+          class="w-full rounded-2xl border px-4 py-2.5 outline-none focus:ring-2" style="background:var(--surface-alt); border-color:var(--border); --tw-ring-color: var(--amber)">
+        <label class="flex items-center gap-2.5 mt-3 cursor-pointer select-none w-fit">
+          <input id="pityModalWeaponGuar" type="checkbox" class="w-5 h-5 rounded-md shrink-0" style="accent-color:var(--amber)">
+          <span class="text-sm font-500">Fate Point ativo <span style="color:var(--text-secondary)" class="font-400">(próximo 5★ é a arma escolhida)</span></span>
+        </label>
+      </div>
+
+      <p id="pityError" class="hidden text-xs mt-1 mb-1 rounded-xl px-3 py-2" style="color:var(--rose); background:var(--rose-soft)" role="alert" aria-live="assertive"></p>
+      <div class="flex gap-2.5 mt-4">
+        <button id="pitySkipBtn" type="button" class="icon-btn flex-1 rounded-2xl font-600 px-4 py-2.5" style="background:var(--surface-alt)">Pular (usar 0)</button>
+        <button id="pityConfirmBtn" type="button" class="icon-btn flex-1 rounded-2xl text-white font-600 px-4 py-2.5" style="background:var(--primary)">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center text-xs mt-8" style="color:var(--text-faint)">
+    Ferramenta não-oficial · dados de personagens e armas via genshin.jmp.blue · feito com <i data-lucide="heart" class="w-3 h-3 inline-block align-text-bottom fill-current"></i>
+  </footer>
+</div>
+
+<!-- Lógica da aplicação (carregada em ordem de dependência) -->
+<script src="js/state.js"></script>
+<script src="js/rules-engine.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/item-helpers.js"></script>
+<script src="js/autocomplete.js"></script>
+<script src="js/characters.js"></script>
+<script src="js/render-list.js"></script>
+<script src="js/planner.js"></script>
+<script src="js/manual-modal.js"></script>
+<script src="js/pity-modal.js"></script>
+<script src="js/rules-modal.js"></script>
+<script src="js/share-card.js"></script>
+<script src="js/export.js"></script>
+<script src="js/device.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/search-scope.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

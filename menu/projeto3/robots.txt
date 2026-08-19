@@ -1,0 +1,7 @@
+# robots.txt — Planejador de Tiros (Genshin Impact)
+# TODO: trocar https://example.com pelo domínio real do site
+
+User-agent: *
+Allow: /
+
+Sitemap: https://example.com/sitemap.xml
