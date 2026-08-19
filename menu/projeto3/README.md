@@ -16,6 +16,7 @@ Aplicação web estática que ajuda a planejar tiros (wishes) no Genshin Impact:
 - Tema claro/escuro.
 - Persistência automática no navegador (`localStorage`) de todos os campos preenchidos e da lista.
 - Exportar o plano como imagem PNG pronta para compartilhar.
+- Instalável como PWA (ícone na tela inicial do celular, abre em janela própria, funciona offline após a primeira visita).
 
 ## Stack
 
@@ -56,7 +57,10 @@ O JavaScript é dividido em **scripts clássicos** (não ES modules) que compart
 │   ├── validation.js     validação dos campos de pity/tiros guardados
 │   ├── search-scope.js   toggle de escopo da busca (personagem/arma/ambos)
 │   ├── analytics.js      integração com Google Analytics (GA4) — carregado no <head>
-│   └── main.js           listeners restantes e sequência de inicialização
+│   ├── main.js           listeners restantes e sequência de inicialização
+│   └── sw-register.js    registra o service worker (sw.js)
+├── manifest.webmanifest  metadados de PWA (nome, ícones, cores, display standalone)
+├── sw.js                 service worker: cacheia o app shell para instalação/uso offline
 ├── robots.txt
 ├── sitemap.xml
 └── CLAUDE.md             guia para uso com o Claude Code

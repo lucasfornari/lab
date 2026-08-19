@@ -9,6 +9,7 @@ Aplicação web estática — um planejador/calculadora de tiros (wishes) para G
 - `index.html` — markup e SEO. Carrega o CSS e os scripts (estes no fim do `<body>`, em ordem de dependência).
 - `styles/main.css` — CSS global (variáveis de tema, classes utilitárias próprias).
 - `js/*.js` — lógica dividida por funcionalidade (um arquivo por área da página).
+- `manifest.webmanifest` / `sw.js` — PWA (instalação em mobile/desktop). `sw.js` fica na raiz (não em `js/`) porque o escopo de um service worker é o diretório em que ele é servido; roda num contexto isolado (`ServiceWorkerGlobalScope`), fora do escopo global compartilhado pelos scripts clássicos. `js/sw-register.js` só registra o worker.
 
 ## Como rodar
 
@@ -42,6 +43,7 @@ Arquivos por responsabilidade, na ordem em que são carregados:
 - `validation.js` — validação dos campos de pity/tiros guardados.
 - `search-scope.js` — toggle de escopo da busca (personagem/arma/ambos).
 - `main.js` — listeners restantes e sequência de inicialização.
+- `sw-register.js` — registra `sw.js` (fora do escopo global — roda depois de `main.js`, mas não depende dele).
 
 ## Dependências (todas via CDN, em runtime)
 
@@ -76,3 +78,4 @@ Persistência é via `localStorage` (`STORAGE_KEY = 'genshinPlannerState'` para 
 - Toda a interface, comentários e textos voltados ao usuário estão em **português (pt-BR)**, com acentuação correta. Mantenha esse idioma.
 - Temas são controlados pela classe `.dark` no `<html>` e por variáveis CSS (`--bg`, `--primary`, etc.) definidas em `:root` e `html.dark`. Use essas variáveis em vez de cores fixas.
 - Personagens não encontrados na API podem ser adicionados manualmente (modal "cadastro manual"), recebendo `id` com prefixo `manual-` e flag `manual: true`.
+- Os ícones de PWA (`assets/icon-192.png`, `icon-512.png`, `icon-512-maskable.png`) foram gerados a partir da mesma marca de `assets/favicon.svg` (script descartável, não versionado). Se a arte definitiva substituir o favicon placeholder, regenere esses três arquivos junto para manter a identidade visual consistente.
